@@ -101,6 +101,7 @@ export default function Header() {
                         </div>
                     </div>
                     <Link href="/collections/all" className={styles.navLink}>All</Link>
+                    <Link href="/collections/men" className={styles.navLink}>Men</Link>
                     <Link href="/pages/about" className={styles.navLink}>About</Link>
                 </nav>
 

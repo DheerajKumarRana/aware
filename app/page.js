@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import styles from './page.module.css';
-import Link from 'next/link';
 import Banner from '@/components/home/Banner';
 
 export default function Home() {

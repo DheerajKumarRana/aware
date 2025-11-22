@@ -18,7 +18,28 @@ export default function TestCollectionPage() {
             } catch (err) {
                 setError(err);
             } finally {
-            </pre >
-        </div >
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    if (loading) return <div style={{ padding: 40 }}>Loading debug data...</div>;
+    if (error) return (
+        <div style={{ padding: 40, color: 'red' }}>
+            <h2>Error Occurred</h2>
+            <p><strong>Message:</strong> {error.message}</p>
+            <p><strong>Stack:</strong> {error.stack}</p>
+            <pre>{JSON.stringify(error, null, 2)}</pre>
+        </div>
+    );
+
+    return (
+        <div style={{ padding: 40 }}>
+            <h1>Debug: Men Collection</h1>
+            <pre style={{ background: '#f4f4f4', padding: 20, borderRadius: 8, overflow: 'auto' }}>
+                {JSON.stringify(data, null, 2)}
+            </pre>
+        </div>
     );
 }

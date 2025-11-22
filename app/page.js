@@ -1,88 +1,100 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import Link from 'next/link';
+import Banner from '@/components/home/Banner';
 
 export default function Home() {
+  // Placeholder data for the banner
+  // In a real app, this could come from Shopify Metaobjects or a CMS
+  const bannerSlides = [
+    {
+      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop',
+      alt: 'Fashion Collection 1',
+      link: '/collections/new-arrivals'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop',
+      alt: 'Fashion Collection 2',
+      link: '/collections/summer-sale'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop',
+      alt: 'Fashion Collection 3',
+      link: '/collections/all'
+    }
+  ];
+
   return (
-    <div>
-      {/* Hero Section - Editorial Style */}
-      <section className={styles.hero}>
-        {/* Placeholder for video - using a high quality image for now */}
-        <div className={styles.videoBackground} style={{ backgroundColor: '#1a1a1a' }}>
-          {/* In a real app, use <video> tag here */}
-          <img
-            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop"
-            alt="Hero Background"
-            className={styles.videoBackground}
-          />
-        </div>
-        <div className={styles.overlay}></div>
+    <main className={styles.main}>
+      {/* Custom Banner Section */}
+      <Banner
+        slides={bannerSlides}
+        marqueeText="FREE SHIPPING ON ALL ORDERS OVER $100 • NEW ARRIVALS JUST LANDED • SHOP THE LATEST TRENDS"
+        autoplaySpeed={5000}
+      />
 
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>The New Standard</h1>
-          <p className={styles.heroSubtitle}>
-            Elevated essentials for the conscious creator.
-          </p>
-          <Link href="/collections/all" className={styles.ctaButton}>
-            Explore Collection
-          </Link>
-        </div>
-      </section>
-
-      {/* Shop the Look - Lifestyle Integration */}
+      {/* Shop the Look Section */}
       <section className={styles.shopTheLook}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Shop The Look</h2>
-        </div>
-
         <div className={styles.lookContainer}>
           <div className={styles.lookImageWrapper}>
             <img
               src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop"
-              alt="Model wearing full outfit"
+              alt="Complete Look"
               className={styles.lookImage}
             />
+            <div className={styles.hotspot} style={{ top: '30%', left: '40%' }}>
+              <div className={styles.hotspotDot}></div>
+              <div className={styles.hotspotCard}>
+                <p>Silk Blouse</p>
+                <span>$120</span>
+              </div>
+            </div>
           </div>
-
-          <div className={styles.productList}>
-            <div className={styles.productCard}>
-              <div className={styles.productThumb} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1551028919-ac7bcb57458b?q=80&w=500&auto=format&fit=crop)', backgroundSize: 'cover' }}></div>
-              <div className={styles.productInfo}>
-                <h4>Essential Oversized Tee</h4>
-                <p>$45.00</p>
-                <Link href="/products/essential-tee" className={styles.shopLink}>View Product</Link>
-              </div>
+          <div className={styles.lookProducts}>
+            <h2 className={styles.sectionTitle}>Shop The Look</h2>
+            <p className={styles.sectionSubtitle}>Effortless elegance for every occasion.</p>
+            <div className={styles.productStack}>
+              {/* Product Card Placeholders */}
+              {[1, 2].map((i) => (
+                <Link href={`/products/sample-product-${i}`} key={i} className={styles.miniProductCard}>
+                  <div className={styles.miniProductImage}></div>
+                  <div className={styles.miniProductInfo}>
+                    <h4>Essential Blazer</h4>
+                    <p>$180.00</p>
+                  </div>
+                </Link>
+              ))}
             </div>
-
-            <div className={styles.productCard}>
-              <div className={styles.productThumb} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1542272617-08f086302542?q=80&w=500&auto=format&fit=crop)', backgroundSize: 'cover' }}></div>
-              <div className={styles.productInfo}>
-                <h4>Relaxed Fit Trousers</h4>
-                <p>$85.00</p>
-                <Link href="/products/relaxed-trousers" className={styles.shopLink}>View Product</Link>
-              </div>
-            </div>
+            <Link href="/collections/all" className={styles.textLink}>View All Products &rarr;</Link>
           </div>
         </div>
       </section>
 
-      {/* Trending Carousel - Community Favorites */}
+      {/* Trending Carousel */}
       <section className={styles.trending}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Trending Now</h2>
-        </div>
-
-        <div className={styles.trendingScroll}>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <div key={item} className={styles.trendingItem}>
-              <div className={styles.trendingImage} style={{ backgroundImage: `url(https://images.unsplash.com/photo-${item === 1 ? '1521572163474-6864f9cf17ab' : item === 2 ? '1503341455253-b2e72333dbdb' : '1576566588028-4147f3842f27'}?q=80&w=500&auto=format&fit=crop)`, backgroundSize: 'cover' }}></div>
-              <div className={styles.trendingMeta}>
-                <div className={styles.trendingName}>Signature Hoodie</div>
-                <div className={styles.trendingPrice}>$65.00</div>
-              </div>
+        <div className={styles.container}>
+          <div className={styles.trendingHeader}>
+            <h2 className={styles.sectionTitle}>Trending Now</h2>
+            <div className={styles.carouselControls}>
+              <button className={styles.controlBtn}>&larr;</button>
+              <button className={styles.controlBtn}>&rarr;</button>
             </div>
-          ))}
+          </div>
+
+          <div className={styles.carouselTrack}>
+            {/* Carousel Items */}
+            {[1, 2, 3, 4].map((i) => (
+              <Link href={`/products/trending-${i}`} key={i} className={styles.carouselItem}>
+                <div className={styles.carouselImage}></div>
+                <div className={styles.carouselInfo}>
+                  <h3>Summer Dress</h3>
+                  <p>$89.00</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

@@ -21,12 +21,29 @@ export default async function CollectionPage({ params, searchParams }) {
     let collection = null;
 
     try {
-        const { data } = await client.request(collectionQuery, {
-            variables: { handle, filters: [] }
-        });
-        collection = data?.collection;
+        console.log(`Fetching collection with handle: ${handle}`);
+
+        if (handle === 'all') {
+            // Fetch all products directly
+            const { productsQuery } = await import('@/lib/shopify');
+            const { data } = await client.request(productsQuery, { variables: { first: 20 } });
+            console.log('All products data received:', data);
+            collection = {
+                title: 'All Products',
+                description: 'Browse our entire collection.',
+                products: data?.products
+            };
+        } else {
+            // Fetch specific collection
+            const { data } = await client.request(collectionQuery, {
+                variables: { handle, filters: [] }
+            });
+            console.log('Collection data received:', data);
+            collection = data?.collection;
+        }
     } catch (err) {
         console.error('Error fetching collection:', err);
+        console.error('Error details:', JSON.stringify(err, null, 2));
     }
 
     if (!collection) {

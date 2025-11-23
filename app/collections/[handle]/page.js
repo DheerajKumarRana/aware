@@ -6,7 +6,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function CollectionPage({ params, searchParams }) {
-    const { handle } = params;
+    const { handle } = await params;
 
     // Parse filters from URL search params
     // Example: ?filter.v.option.size=M becomes { "v.option.size": "M" }

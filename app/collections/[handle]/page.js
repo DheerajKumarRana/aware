@@ -1,4 +1,4 @@
-import { client, collectionQuery } from '@/lib/shopify';
+import { client, collectionQuery, productsQuery } from '@/lib/shopify';
 import styles from './page.module.css';
 import Link from 'next/link';
 
@@ -25,7 +25,6 @@ export default async function CollectionPage({ params, searchParams }) {
 
         if (handle === 'all') {
             // Fetch all products directly
-            const { productsQuery } = await import('@/lib/shopify');
             const { data } = await client.request(productsQuery, { variables: { first: 20 } });
             console.log('All products data received:', data);
             collection = {

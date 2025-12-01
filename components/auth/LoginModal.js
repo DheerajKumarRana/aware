@@ -1,15 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/auth/auth-context';
-import { client, customerAccessTokenCreateMutation, customerCreateMutation } from '@/lib/shopify';
-import styles from '@/components/auth/LoginModal.module.css'; // Reuse modal styles for consistency
+import { useAuth } from './auth-context';
+import { client, customerCreateMutation, customerAccessTokenCreateMutation } from '@/lib/shopify';
+import styles from './LoginModal.module.css';
 
-export default function Login() {
-    const router = useRouter();
-    const { login } = useAuth();
+export default function LoginModal() {
+    const { isLoginModalOpen, closeLoginModal, login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [loginMethod, setLoginMethod] = useState('phone'); // 'phone' or 'email'
@@ -21,6 +18,8 @@ export default function Login() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [isSignup, setIsSignup] = useState(false); // Toggle between login and signup for email
+
+    if (!isLoginModalOpen) return null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,7 +59,7 @@ export default function Login() {
                     } else if (data?.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
                         const token = data.customerAccessTokenCreate.customerAccessToken.accessToken;
                         login(token);
-                        router.push('/account');
+                        closeLoginModal();
                     }
                 }
             } catch (err) {
@@ -69,18 +68,20 @@ export default function Login() {
                 setLoading(false);
             }
         } else {
-            // Simulate Phone login process
+            // Simulate Phone OTP
             setTimeout(() => {
                 setLoading(false);
+                alert(`OTP sent to ${phone}`);
                 login('demo-token');
-                router.push('/account');
+                closeLoginModal();
             }, 1000);
         }
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', padding: '2rem' }}>
-            <div className={styles.modal} style={{ position: 'relative', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <div className={styles.overlay}>
+            <div className={styles.modal}>
+                <button className={styles.closeBtn} onClick={closeLoginModal}>×</button>
                 <div className={styles.content}>
                     <div className={styles.imageSection}>
                         <img

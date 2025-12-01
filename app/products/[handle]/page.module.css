@@ -1,211 +1,322 @@
 .container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
-    min-height: 100vh;
+    padding: 2rem;
+    font-family: sans-serif;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 1.5rem;
 }
 
 .grid {
     display: grid;
-    gap: 4rem;
+    grid-template-columns: 120px 1fr 480px;
+    gap: 2rem;
+    align-items: start;
 }
 
-@media (min-width: 992px) {
-    .grid {
-        grid-template-columns: 1.5fr 1fr;
-        align-items: start;
-    }
-}
-
-/* Gallery */
-.gallery {
+/* Left: Thumbnails */
+.thumbnailList {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.mainImageWrapper {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background-color: #f5f5f5;
-    overflow: hidden;
-    position: relative;
-}
-
-.mainImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.thumbnailGrid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-}
-
 .thumbnail {
+    width: 100%;
     aspect-ratio: 3/4;
-    background-color: #f5f5f5;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
     border: 1px solid transparent;
+    opacity: 0.7;
+    transition: all 0.2s;
 }
 
 .thumbnail:hover,
 .thumbnail.active {
+    border-color: var(--foreground);
     opacity: 1;
-    border-color: var(--primary);
 }
 
 .thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-/* Details Panel */
-.details {
-    position: sticky;
-    top: 6rem;
-}
-
-.header {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 2rem;
-}
-
-.title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    line-height: 1.1;
+    display: block;
 }
 
 .price {
     font-size: 1.25rem;
-    color: #444;
-}
-
-.options {
-    margin-bottom: 2rem;
-}
-
-.optionGroup {
-    margin-bottom: 1.5rem;
-}
-
-.optionLabel {
-    font-size: 0.875rem;
     font-weight: 600;
-    margin-bottom: 0.75rem;
-    display: block;
-    text-transform: uppercase;
+    margin-top: 0.5rem;
+    color: var(--foreground);
 }
 
-.optionValues {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.optionButton {
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border);
-    background: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-}
-
-.optionButton:hover {
-    border-color: var(--primary);
-}
-
-.optionButton.selected {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    border-color: var(--primary);
-}
-
-.optionButton.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    text-decoration: line-through;
-    background-color: #f5f5f5;
-}
-
-.actions {
+.section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 3rem;
 }
 
-.addToCart {
+.sectionTitle {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    color: var(--foreground);
+}
+
+/* Center: Main Image */
+.mainColumn {
+    position: relative;
+}
+
+.mainImageWrapper {
     width: 100%;
-    padding: 1.25rem;
-    background-color: var(--primary);
-    color: var(--primary-foreground);
+    position: relative;
+    background-color: var(--secondary);
+}
+
+.mainImage {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.wishlistButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
     border: none;
+    cursor: pointer;
+    z-index: 10;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.wishlistButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.wishlistButton.active .wishlistIcon {
+    fill: #ff4d4d;
+    stroke: #ff4d4d;
+}
+
+.wishlistIcon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--foreground);
+    fill: none;
+    transition: all 0.3s ease;
+}
+
+/* Proximity/Hover Animation for Wishlist */
+.wishlistButton:hover .wishlistIcon {
+    stroke: #ff4d4d;
+}
+
+.colorBanner {
+    background-color: var(--foreground);
+    color: var(--background);
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    margin-top: -4px;
+    /* Connect to image */
+}
+
+/* Right: Details */
+.detailsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-left: 2rem;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+    color: var(--foreground);
+}
+
+/* Swatches */
+.colorGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+}
+
+.swatch {
+    aspect-ratio: 3/4;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.swatch:hover {
+    border-color: var(--border);
+}
+
+.swatch.activeSwatch {
+    border-color: var(--foreground);
+    box-shadow: 0 0 0 1px var(--foreground);
+    /* Double border effect */
+}
+
+.swatch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Sizes */
+.sizeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sizeChart {
+    font-size: 0.75rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--foreground);
+}
+
+.sizeGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: start;
+    /* Center buttons like screenshot */
+}
+
+.sizeBtn {
+    min-width: 3.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--foreground);
+}
+
+.sizeBtn:hover:not(:disabled) {
+    border-color: var(--foreground);
+}
+
+.sizeBtn.activeSize {
+    border-color: var(--foreground);
+    background-color: var(--secondary);
+    /* Keep white bg per screenshot usually, or black if preferred */
+    box-shadow: inset 0 0 0 1px var(--foreground);
+}
+
+.sizeBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    text-decoration: line-through;
+    background-color: var(--secondary);
+}
+
+.deliveryNote {
+    font-size: 0.75rem;
+    color: #d35400;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* Add to Bag */
+.addToBag {
+    width: 100%;
+    background-color: var(--foreground);
+    color: var(--background);
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
     cursor: pointer;
     transition: opacity 0.2s;
 }
 
-.addToCart:hover {
+.addToBag:hover {
     opacity: 0.9;
 }
 
-.addToCart:disabled {
-    opacity: 0.7;
+.addToBag:disabled {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
     cursor: not-allowed;
 }
 
-.description {
-    line-height: 1.6;
-    color: #444;
-}
-
-.description h3 {
-    font-size: 1rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Recommendations */
-.recommendations {
-    margin-top: 6rem;
-    padding-top: 4rem;
+/* Accordions */
+.accordions {
     border-top: 1px solid var(--border);
+    margin-top: 1rem;
 }
 
-.recTitle {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+.accordionItem {
+    border-bottom: 1px solid var(--border);
 }
 
-.recGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
+.accordionHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--foreground);
 }
 
-@media (max-width: 768px) {
+.accordionContent {
+    padding-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--secondary-foreground);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
     .grid {
+        grid-template-columns: 1fr;
         gap: 2rem;
     }
 
-    .title {
-        font-size: 2rem;
+    .thumbnailList {
+        display: none;
     }
 
-    .details {
-        position: static;
+    .detailsColumn {
+        padding-left: 0;
     }
+}
+
+.singleOptionText {
+    font-size: 0.875rem;
+    color: var(--secondary-foreground);
+    font-style: italic;
+    margin: 0;
 }

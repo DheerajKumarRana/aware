@@ -1,16 +1,16 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import styles from './Header.module.css';
+import Link from 'next/link';
 import { useCart } from '@/components/cart/cart-context';
 import { useWishlist } from '@/components/wishlist/wishlist-context';
+import styles from './Header.module.css';
 
 export default function Header() {
-    const { toggleCart, cart } = useCart();
+    const { cart, toggleCart } = useCart();
     const { wishlist } = useWishlist();
 
-    const cartQuantity = cart?.lines?.edges?.reduce((sum, { node }) => sum + node.quantity, 0) || 0;
+    const cartQuantity = cart?.totalQuantity || 0;
 
     return (
         <header className={styles.header}>
@@ -109,22 +109,22 @@ export default function Header() {
                     <Link href="/wishlist" className={styles.iconButton}>
                         <span className={styles.wishlistIcon}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>
                             {wishlist.length > 0 && <span className={styles.wishlistCount}>{wishlist.length}</span>}
                         </span>
                     </Link>
                     <Link href="/account" className={styles.iconButton}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
                         </svg>
                     </Link>
                     <button className={styles.iconButton} onClick={toggleCart}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                         </svg>
                         {cartQuantity > 0 && <span className={styles.wishlistCount} style={{ top: -5, right: -5 }}>{cartQuantity}</span>}
                     </button>

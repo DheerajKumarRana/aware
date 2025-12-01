@@ -7,8 +7,9 @@ import Link from 'next/link';
 export default function Banner({
     slides = [],
     marqueeText = "Welcome to our store",
-    autoplaySpeed = 5000,
-    enableAutoplay = true
+    autoplaySpeed = 10000,
+    enableAutoplay = true,
+    marqueeSpeed = 25
 }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -100,7 +101,10 @@ export default function Banner({
 
             {marqueeText && (
                 <div className={styles.bannerMarquee}>
-                    <div className={styles.marqueeContent}>
+                    <div
+                        className={styles.marqueeContent}
+                        style={{ animationDuration: `${marqueeSpeed}s` }}
+                    >
                         {[1, 2, 3, 4].map(i => (
                             <span key={i} className={styles.marqueeItem}>{marqueeText}</span>
                         ))}

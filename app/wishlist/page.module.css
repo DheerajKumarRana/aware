@@ -88,3 +88,40 @@
     text-decoration: none;
     color: inherit;
 }
+
+.buttonGroup {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.addToCartBtn,
+.buyNowBtn {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid #000;
+    transition: all 0.2s;
+}
+
+.addToCartBtn {
+    background-color: #000;
+    color: #fff;
+}
+
+.addToCartBtn:hover {
+    background-color: #333;
+    border-color: #333;
+}
+
+.buyNowBtn {
+    background-color: #fff;
+    color: #000;
+}
+
+.buyNowBtn:hover {
+    background-color: #f5f5f5;
+}

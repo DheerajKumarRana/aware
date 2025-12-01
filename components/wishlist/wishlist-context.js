@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from '@/components/auth/auth-context';
 
 const WishlistContext = createContext();
 
@@ -19,6 +20,16 @@ export function WishlistProvider({ children }) {
     useEffect(() => {
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
     }, [wishlist]);
+
+    const { isLoggedIn } = useAuth();
+
+    // Clear wishlist on logout
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setWishlist([]);
+            localStorage.removeItem('wishlist');
+        }
+    }, [isLoggedIn]);
 
     const addToWishlist = (product) => {
         if (!wishlist.some(item => item.id === product.id)) {

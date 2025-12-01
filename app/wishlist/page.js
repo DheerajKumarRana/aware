@@ -1,11 +1,13 @@
 'use client';
 
 import { useWishlist } from '@/components/wishlist/wishlist-context';
+import { useCart } from '@/components/cart/cart-context';
 import styles from './page.module.css';
 import Link from 'next/link';
 
 export default function WishlistPage() {
     const { wishlist, removeFromWishlist } = useWishlist();
+    const { addToCart } = useCart();
 
     return (
         <div className={styles.container}>
@@ -37,7 +39,7 @@ export default function WishlistPage() {
                             <Link href={`/products/${product.handle}`} className={styles.link}>
                                 <div className={styles.imageWrapper}>
                                     <img
-                                        src={product.featuredImage?.url || 'https://via.placeholder.com/300'}
+                                        src={product.featuredImage?.url || product.images?.edges?.[0]?.node?.url || 'https://via.placeholder.com/300'}
                                         alt={product.title}
                                         className={styles.image}
                                     />
@@ -47,6 +49,31 @@ export default function WishlistPage() {
                                     <p className={styles.price}>
                                         {product.priceRange?.minVariantPrice?.amount} {product.priceRange?.minVariantPrice?.currencyCode}
                                     </p>
+                                    <div className={styles.buttonGroup}>
+                                        <button
+                                            className={styles.addToCartBtn}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                const variantId = product.variants?.edges?.[0]?.node?.id;
+                                                if (variantId) addToCart(variantId, 1);
+                                            }}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                        <button
+                                            className={styles.buyNowBtn}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                const variantId = product.variants?.edges?.[0]?.node?.id;
+                                                if (variantId) {
+                                                    addToCart(variantId, 1);
+                                                    window.location.href = '/cart';
+                                                }
+                                            }}
+                                        >
+                                            Buy Now
+                                        </button>
+                                    </div>
                                 </div>
                             </Link>
                         </div>

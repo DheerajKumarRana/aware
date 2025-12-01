@@ -1,0 +1,134 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    width: 800px;
+    max-width: 90%;
+    height: 500px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    overflow: hidden;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10;
+    color: #666;
+}
+
+.content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.imageSection {
+    flex: 1;
+    background-color: #f0f0f0;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.formSection {
+    flex: 1;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.form {
+    width: 100%;
+    max-width: 300px;
+}
+
+.inputGroup {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.prefix {
+    color: #666;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+.input {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.submitBtn {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submitBtn:hover {
+    background-color: #333;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .imageSection {
+        display: none;
+    }
+
+    .formSection {
+        padding: 2rem;
+    }
+}

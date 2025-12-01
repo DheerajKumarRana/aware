@@ -4,14 +4,8 @@
     z-index: 50;
     width: 100%;
     border-bottom: 1px solid var(--border);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(10, 10, 10, 0.8);
     backdrop-filter: blur(10px);
-}
-
-@media (prefers-color-scheme: dark) {
-    .header {
-        background-color: rgba(10, 10, 10, 0.8);
-    }
 }
 
 .container {
@@ -73,9 +67,9 @@
     top: 100%;
     left: 0;
     width: 100vw;
-    background: #E8F3E8;
+    background: var(--background);
     /* Pastel Mint/Sage Green */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border);
     padding: 3rem 0;
     opacity: 0;
     visibility: hidden;
@@ -84,7 +78,7 @@
     z-index: 100;
     left: 278%;
     transform: translateX(-50%) translateY(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .navItem:hover .megaMenu {
@@ -105,7 +99,7 @@
 
 .megaColumn {
     padding: 0 2rem;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid var(--border);
 }
 
 .megaColumn:last-child {
@@ -122,7 +116,7 @@
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 1.5rem;
-    color: #1a1a1a;
+    color: var(--foreground);
 }
 
 .megaColumn ul {
@@ -136,7 +130,7 @@
 }
 
 .megaColumn a {
-    color: #444;
+    color: var(--secondary-foreground);
     text-decoration: none;
     font-size: 0.95rem;
     transition: color 0.2s;
@@ -144,7 +138,7 @@
 }
 
 .megaColumn a:hover {
-    color: #000;
+    color: var(--primary);
     text-decoration: underline;
 }
 
@@ -152,14 +146,14 @@
 .colorSectionTitle {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #2563EB;
+    color: #60A5FA;
     text-transform: uppercase;
     margin-bottom: 0.75rem;
     letter-spacing: 0.05em;
 }
 
 .colorSectionTitle.trending {
-    color: #E11D48;
+    color: #FB7185;
     margin-top: 1.5rem;
 }
 
@@ -224,7 +218,7 @@
     top: -5px;
     right: -5px;
     background: var(--primary);
-    color: white;
+    color: var(--primary-foreground);
     font-size: 10px;
     width: 16px;
     height: 16px;

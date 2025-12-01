@@ -1,48 +1,99 @@
 import { client, collectionQuery, productsQuery } from '@/lib/shopify';
 import styles from './page.module.css';
 import Link from 'next/link';
+import ProductCard from '@/components/product/ProductCard';
+import FilterSidebar from '@/components/collection/FilterSidebar';
 
 // Force dynamic rendering to handle search params
 export const dynamic = 'force-dynamic';
 
 export default async function CollectionPage({ params, searchParams }) {
     const { handle } = await params;
+    const resolvedSearchParams = await searchParams; // Next.js 15 requires awaiting searchParams
 
     // Parse filters from URL search params
-    // Example: ?filter.v.option.size=M becomes { "v.option.size": "M" }
-    // Note: This is a simplified implementation. Real Shopify filtering requires mapping these correctly to the API input.
-    // For this demo, we'll fetch the collection but the actual filtering logic would need a more complex mapper 
-    // or using the Shopify Search & Discovery app's standard URL structure.
+    const filters = [];
 
-    // Since we are using the basic Storefront API, we'll fetch products and display them.
-    // Implementing full dynamic filtering requires fetching 'facets' which is available in newer API versions.
-    // For now, we will display the structure and the products.
+    // Iterate over search params to build Shopify filter array
+    // Example: ?filter.v.option.size=M -> { "variantOption": { "name": "size", "value": "M" } }
+    Object.entries(resolvedSearchParams).forEach(([key, value]) => {
+        if (key.startsWith('filter.v.option.')) {
+            const optionName = key.replace('filter.v.option.', '');
+            // Handle multiple values for same key
+            const values = Array.isArray(value) ? value : [value];
+            values.forEach(val => {
+                filters.push({ variantOption: { name: optionName, value: val } });
+            });
+        } else if (key.startsWith('filter.p.m.')) {
+            // Parse taxonomy/metafield filters
+            // Format: filter.p.m.namespace.key
+            const parts = key.replace('filter.p.m.', '').split('.');
+            if (parts.length >= 2) {
+                const namespace = parts[0];
+                const keyName = parts.slice(1).join('.'); // Join back in case key has dots
+                const values = Array.isArray(value) ? value : [value];
+                values.forEach(val => {
+                    // We use 'taxonomyMetafield' because that's what the API returned in the input
+                    filters.push({
+                        taxonomyMetafield: {
+                            namespace,
+                            key: keyName,
+                            value: val
+                        }
+                    });
+                });
+            }
+        } else if (key === 'filter.v.availability') {
+            const val = Array.isArray(value) ? value[0] : value;
+            filters.push({ available: val === '1' });
+        } else if (key === 'filter.p.product_type') {
+            const values = Array.isArray(value) ? value : [value];
+            values.forEach(val => {
+                filters.push({ productType: val });
+            });
+        } else if (key.startsWith('filter.v.price.')) {
+            const type = key.replace('filter.v.price.', ''); // gte or lte
+            const val = Array.isArray(value) ? value[0] : value;
+            filters.push({ price: { [type === 'gte' ? 'min' : 'max']: parseFloat(val) } });
+        }
+    });
 
     let collection = null;
+    let availableFilters = [];
 
     try {
-        console.log(`Fetching collection with handle: ${handle}`);
-
         if (handle === 'all') {
-            // Fetch all products directly
-            const { data } = await client.request(productsQuery, { variables: { first: 20 } });
-            console.log('All products data received:', data);
-            collection = {
-                title: 'All Products',
-                description: 'Browse our entire collection.',
-                products: data?.products
-            };
+            // "All" collection logic often needs a specific collection handle in Shopify
+            // or a different query. For simplicity, we'll try to fetch a collection named 'all'
+            // If that fails, we fallback to productsQuery but that doesn't support facets easily.
+            // Best practice: Create a smart collection in Shopify with handle 'all' (condition: price > 0)
+
+            const { data } = await client.request(collectionQuery, {
+                variables: { handle, filters }
+            });
+
+            if (data?.collection) {
+                collection = data.collection;
+                availableFilters = data.collection.products.filters;
+            } else {
+                // Fallback if 'all' collection doesn't exist
+                const { data: allData } = await client.request(productsQuery, { variables: { first: 20 } });
+                collection = {
+                    title: 'All Products',
+                    description: 'Browse our entire collection.',
+                    products: allData?.products
+                };
+            }
         } else {
             // Fetch specific collection
             const { data } = await client.request(collectionQuery, {
-                variables: { handle, filters: [] }
+                variables: { handle, filters }
             });
-            console.log('Collection data received:', data);
             collection = data?.collection;
+            availableFilters = data?.collection?.products?.filters || [];
         }
     } catch (err) {
         console.error('Error fetching collection:', err);
-        console.error('Error details:', JSON.stringify(err, null, 2));
     }
 
     if (!collection) {
@@ -66,40 +117,8 @@ export default async function CollectionPage({ params, searchParams }) {
             </div>
 
             <div className={styles.layout}>
-                {/* Sidebar - Placeholder for Dynamic Filters */}
-                <aside className={styles.sidebar}>
-                    <div className={styles.filterGroup}>
-                        <h3 className={styles.filterTitle}>Availability</h3>
-                        <div className={styles.filterList}>
-                            <label className={styles.filterItem}>
-                                <div className={`${styles.checkbox} ${styles.checked}`}></div>
-                                In Stock
-                            </label>
-                            <label className={styles.filterItem}>
-                                <div className={styles.checkbox}></div>
-                                Out of Stock
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={styles.filterGroup}>
-                        <h3 className={styles.filterTitle}>Price</h3>
-                        <div className={styles.filterList}>
-                            <label className={styles.filterItem}>
-                                <div className={styles.checkbox}></div>
-                                Under $50
-                            </label>
-                            <label className={styles.filterItem}>
-                                <div className={styles.checkbox}></div>
-                                $50 - $100
-                            </label>
-                            <label className={styles.filterItem}>
-                                <div className={styles.checkbox}></div>
-                                $100+
-                            </label>
-                        </div>
-                    </div>
-                </aside>
+                {/* Dynamic Filters */}
+                <FilterSidebar filters={availableFilters} />
 
                 {/* Product Grid */}
                 <main className={styles.main}>
@@ -110,27 +129,11 @@ export default async function CollectionPage({ params, searchParams }) {
                         </div>
                     ) : (
                         <div className={styles.grid}>
-                            {products.map((product) => (
-                                <Link key={product.id} href={`/products/${product.handle}`} className={styles.productCard}>
-                                    <div className={styles.imageWrapper}>
-                                        {product.images.edges[0] ? (
-                                            <img
-                                                src={product.images.edges[0].node.url}
-                                                alt={product.images.edges[0].node.altText || product.title}
-                                                className={styles.productImage}
-                                            />
-                                        ) : (
-                                            <div style={{ width: '100%', height: '100%', backgroundColor: '#eee' }}></div>
-                                        )}
-                                    </div>
-                                    <div className={styles.productInfo}>
-                                        <h3 className={styles.productTitle}>{product.title}</h3>
-                                        <p className={styles.productPrice}>
-                                            {product.priceRange.minVariantPrice.amount} {product.priceRange.minVariantPrice.currencyCode}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
+                            {products.map((product) => {
+                                return (
+                                    <ProductCard key={product.id} product={product} />
+                                );
+                            })}
                         </div>
                     )}
                 </main>

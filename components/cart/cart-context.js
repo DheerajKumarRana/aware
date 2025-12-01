@@ -17,7 +17,7 @@ export function CartProvider({ children }) {
 
             if (localCartId) {
                 try {
-                    const { data } = await client.request(cartQuery, { cartId: localCartId });
+                    const { data } = await client.request(cartQuery, { variables: { cartId: localCartId } });
                     if (data.cart) {
                         setCart(data.cart);
                     } else {
@@ -54,8 +54,10 @@ export function CartProvider({ children }) {
             if (!cart?.id) await createNewCart();
 
             const { data } = await client.request(cartLinesAddMutation, {
-                cartId: cart.id,
-                lines: [{ merchandiseId: variantId, quantity }]
+                variables: {
+                    cartId: cart.id,
+                    lines: [{ merchandiseId: variantId, quantity }]
+                }
             });
 
             setCart(data.cartLinesAdd.cart);
@@ -70,8 +72,10 @@ export function CartProvider({ children }) {
         setIsLoading(true);
         try {
             const { data } = await client.request(cartLinesRemoveMutation, {
-                cartId: cart.id,
-                lineIds: [lineId]
+                variables: {
+                    cartId: cart.id,
+                    lineIds: [lineId]
+                }
             });
             setCart(data.cartLinesRemove.cart);
         } catch (e) {
@@ -85,8 +89,10 @@ export function CartProvider({ children }) {
         setIsLoading(true);
         try {
             const { data } = await client.request(cartLinesUpdateMutation, {
-                cartId: cart.id,
-                lines: [{ id: lineId, quantity }]
+                variables: {
+                    cartId: cart.id,
+                    lines: [{ id: lineId, quantity }]
+                }
             });
             setCart(data.cartLinesUpdate.cart);
         } catch (e) {

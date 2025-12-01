@@ -1,0 +1,128 @@
+.sidebar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.empty {
+    color: var(--secondary-foreground);
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.filterGroup {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+}
+
+.filterGroup:last-child {
+    border-bottom: none;
+}
+
+.filterTitle {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--foreground);
+}
+
+.filterList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filterItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--secondary-foreground);
+    user-select: none;
+}
+
+.filterItem:hover {
+    color: var(--foreground);
+}
+
+/* Custom Checkbox */
+.checkboxInput {
+    display: none;
+    /* Hide default checkbox */
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.checkbox.checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox.checked::after {
+    content: '✓';
+    color: var(--primary-foreground);
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.count {
+    color: var(--secondary-foreground);
+    opacity: 0.7;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+/* Price Range */
+.priceRange {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.priceInput {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    background: transparent;
+    flex: 1;
+}
+
+.priceInput span {
+    color: var(--secondary-foreground);
+    margin-right: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.priceInput input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+    background: transparent;
+    color: var(--foreground);
+}
+
+/* Chrome, Safari, Edge, Opera */
+.priceInput input::-webkit-outer-spin-button,
+.priceInput input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.priceInput input[type=number] {
+    -moz-appearance: textfield;
+}
